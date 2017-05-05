@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Right Sidebar A
+Template Name: Right Sidebar B
 */
 ?>
 
@@ -37,7 +37,7 @@ Template Name: Right Sidebar A
             endwhile; endif; ?>
           </div>
           <div class="col-md-4">
-            <?php dynamic_sidebar('sidebar-a') ?>
+            <?php dynamic_sidebar('sidebar-b') ?>
           </div>
         </div>
       </div>

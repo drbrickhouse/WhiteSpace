@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Right Sidebar A
+Template Name: Hero Left Sidebar B
 */
 ?>
 
@@ -12,6 +12,8 @@ Template Name: Right Sidebar A
 
 <!--Content-->
 <div class="row">
+  <div class="page-hero" style="background-image: url('<?php the_post_thumbnail_url() ?>')">
+  </div>
   <div class="breadcrumbs">
     <div class="col-md-12">
       <?php
@@ -31,13 +33,13 @@ Template Name: Right Sidebar A
       </div>
       <div class="content-wrapper">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-xs-12 col-md-8 col-md-push-4">
             <?php if ( have_posts() ) : while( have_posts() ) : the_post();
                  the_content();
             endwhile; endif; ?>
           </div>
-          <div class="col-md-4">
-            <?php dynamic_sidebar('sidebar-a') ?>
+          <div class="col-xs-12 col-md-4 col-md-pull-8">
+            <?php dynamic_sidebar('sidebar-b') ?>
           </div>
         </div>
       </div>
