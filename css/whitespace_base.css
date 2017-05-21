@@ -110,3 +110,15 @@ a img.aligncenter {
 .navbar {
   margin-bottom: 0px;
 }
+
+@media (min-width: 768px) {
+  .navbar-center {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-center li {
+    float: none;
+    display: inline-block;
+  }
+}

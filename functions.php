@@ -176,6 +176,13 @@ function whitespace_create_widget($name, $id, $description) {
   ));
 }
 
+whitespace_create_widget('Top Bar', 'top-bar', 'The topmost section of the website, generally used for a phone number or CTA');
+whitespace_create_widget('Header A1', 'header-a1', '');
+whitespace_create_widget('Header A2', 'header-a2', '');
+whitespace_create_widget('Header A3', 'header-a3', '');
+whitespace_create_widget('Header B1', 'header-b1', '');
+whitespace_create_widget('Header B2', 'header-b2', '');
+whitespace_create_widget('Header B3', 'header-b3', '');
 whitespace_create_widget('Home 1', 'home-1', 'The first major area on the home page, generally used for a hero image or a slider');
 whitespace_create_widget('Home 2', 'home-2', 'The second major area on the home page, generally used for CTAs');
 whitespace_create_widget('Home 3', 'home-3', 'The third major area on the home page, generally used for a welcome message');

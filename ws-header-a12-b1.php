@@ -15,6 +15,16 @@
     <header>
       <div class="row">
         <?php dynamic_sidebar('top-bar') ?>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <?php dynamic_sidebar('header-a1') ?>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <?php dynamic_sidebar('header-a2') ?>
+        </div>
+      </div>
+      <div class="row">
         <?php dynamic_sidebar('header-b1') ?>
       </div>
     </header>
