@@ -107,6 +107,10 @@ a img.aligncenter {
 }
 
 /************** Theme CSS ****************/
+.clear {
+  clear: both;
+}
+
 .navbar {
   margin-bottom: 0px;
 }

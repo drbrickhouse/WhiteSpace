@@ -177,6 +177,7 @@ function whitespace_create_widget($name, $id, $description) {
 }
 
 whitespace_create_widget('Top Bar', 'top-bar', 'The topmost section of the website, generally used for a phone number or CTA');
+whitespace_create_widget('Top', 'top', 'An area for widets above the menu');
 whitespace_create_widget('Header A1', 'header-a1', '');
 whitespace_create_widget('Header A2', 'header-a2', '');
 whitespace_create_widget('Header A3', 'header-a3', '');

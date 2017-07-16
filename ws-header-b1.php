@@ -13,9 +13,16 @@
     <!--Site Header-->
 
     <header>
-      <div class="row">
-        <?php dynamic_sidebar('top-bar') ?>
-        <?php dynamic_sidebar('header-b1') ?>
+      <div class="row top">
+        <div class="col-md-12">
+          <div class="row top-area">
+            <?php dynamic_sidebar('top-bar') ?>
+            <?php dynamic_sidebar('top') ?>
+          </div>
+          <div class="row">
+            <?php dynamic_sidebar('header-b1') ?>
+          </div>
+        </div>
       </div>
     </header>
 
