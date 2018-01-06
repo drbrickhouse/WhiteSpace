@@ -59,6 +59,13 @@ add_action('init', 'register_theme_menus');
 //Register Custom Navigation Walker
 require_once('wp_bootstrap_navwalker.php');
 
+//Declare WooCommerce Support
+function woocommerce_support() {
+  add_theme_support( 'woocommerce' );
+}
+
+add_action( 'after_setup_theme', 'woocommerce_support' );
+
 //Shortcodes
 function whitespace_shortcode_title(){
     return '<?php the_title(); ?>';
