@@ -6,25 +6,35 @@ Template Name: Hero Both Sidebars B-A
 
 <!--Header-->
 
-<?php get_header (); ?>
+<?php
+$header_choice = get_field('header');
+if ($header_choice == 'default') {
+  get_header();
+} else {
+  get_header($header_choice);
+}
+?>
 
 <!--End Header-->
 
 <!--Content-->
 <div class="row">
   <div class="page-hero" style="background-image: url('<?php the_post_thumbnail_url() ?>')">
-  </div>
-  <div class="breadcrumbs">
-    <div class="col-md-12">
-      <?php
-      if ( function_exists('yoast_breadcrumb') ) {
-      yoast_breadcrumb('<p id="breadcrumbs">','</p>');
-      }
-      ?>
+    <div class="page-hero-overlay">
     </div>
-    <div class="clear"></div>
   </div>
-  <div class="main-wrapper">
+  <div class="col-md-12">
+    <div class="row breadcrumbs">
+      <div class="col-md-12">
+        <?php
+        if ( function_exists('yoast_breadcrumb') ) {
+        yoast_breadcrumb('<p id="breadcrumbs">','</p>');
+        }
+        ?>
+      </div>
+    </div>
+  </div>
+  <div class="row main-wrapper">
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-12 title-bar">
@@ -53,6 +63,13 @@ Template Name: Hero Both Sidebars B-A
 
 <!--Footer-->
 
-<?php get_footer(); ?>
+<?php
+$footer_choice = get_field('footer');
+if ($header_footer == 'default') {
+  get_footer();
+} else {
+  get_footer($footer_choice);
+}
+?>
 
 <!--End Footer-->

@@ -1,37 +1,58 @@
-<?php
-/*
-Template Name: Home
-*/
-?>
-
 <!--Header-->
 
-<?php get_header (); ?>
+<?php
+$header_choice = get_field('header');
+if ($header_choice == 'default') {
+  get_header();
+} else {
+  get_header($header_choice);
+}
+?>
 
 <!--End Header-->
 
-<!--Start Content-->
-
-    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-      <div class="jumbotron-post">
-        <?php
-          $size = ('full');
-          $attr = ['class' => "img-responsive"];
-          the_post_thumbnail($size, $attr);
-        ?>
+<!--Content-->
+<div class="row">
+  <div class="breadcrumbs">
+    <div class="col-md-12">
+      <?php
+      if ( function_exists('yoast_breadcrumb') ) {
+      yoast_breadcrumb('<p id="breadcrumbs">','</p>');
+      }
+      ?>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="main-wrapper">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12 title-bar">
+          <h1 class="page-title"><?php the_title(); ?></h1>
+        </div>
       </div>
-      <div class="col-md-12">
-        <h1><?php the_title(); ?></h1>
-        <?php the_content(); ?>
-        <?php endwhile; else : ?>
-        <p><?php _e('Oh no! There\'s no content here!') ?>
-    <?php endif; ?>
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-12">
+            <?php if ( have_posts() ) : while( have_posts() ) : the_post();
+                 the_content();
+            endwhile; endif; ?>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
 <!--End Content-->
 
+<!--Footer-->
 
-<!--Start Footer-->
-
-<?php get_footer(); ?>
+<?php
+$footer_choice = get_field('footer');
+if ($header_footer == 'default') {
+  get_footer();
+} else {
+  get_footer($footer_choice);
+}
+?>
 
 <!--End Footer-->
