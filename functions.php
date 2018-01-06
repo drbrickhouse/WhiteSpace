@@ -59,12 +59,15 @@ add_action('init', 'register_theme_menus');
 //Register Custom Navigation Walker
 require_once('wp_bootstrap_navwalker.php');
 
-//Declare WooCommerce Support
-function woocommerce_support() {
+//WooCommerce
+function woocommerce_setup() {
+  //Declare WooCommerce Support
   add_theme_support( 'woocommerce' );
+  //Disable WooCommerce CSS
+  add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 }
 
-add_action( 'after_setup_theme', 'woocommerce_support' );
+add_action( 'after_setup_theme', 'woocommerce_setup' );
 
 //Shortcodes
 function whitespace_shortcode_title(){
