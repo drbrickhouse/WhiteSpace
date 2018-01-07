@@ -60,12 +60,20 @@ add_action('init', 'register_theme_menus');
 require_once('wp_bootstrap_navwalker.php');
 
 //WooCommerce
-function woocommerce_setup() {
+function whitespace_woocommerce_setup() {
   //Declare WooCommerce Support
   add_theme_support( 'woocommerce' );
 }
 
-add_action( 'after_setup_theme', 'woocommerce_setup' );
+add_action( 'after_setup_theme', 'whitespace_woocommerce_setup' );
+
+function whitespace_woocommerce_edit_actions() {
+  remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+  remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
+  remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+}
+
+add_action( 'after_setup_theme', 'whitespace_woocommerce_edit_actions' );
 
 //Shortcodes
 function whitespace_shortcode_title(){
