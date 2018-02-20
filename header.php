@@ -32,4 +32,5 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="full-wrapper">
+        <div class="row full-wrapper">
+          <div class="col-md-12">

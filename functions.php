@@ -77,31 +77,35 @@ add_action( 'after_setup_theme', 'whitespace_woocommerce_edit_actions' );
 
 //Shortcodes
 function whitespace_shortcode_title(){
-    return '<?php the_title(); ?>';
+  return '<?php the_title(); ?>';
 }
 
 function whitespace_shortcode_content(){
-    return '<?php the_content(); ?>';
+  return '<?php the_content(); ?>';
 }
 
 function whitespace_shortcode_featured_image(){
-    return '<?php the_post_thumbnail(); ?>';
+  return '<?php the_post_thumbnail(); ?>';
 }
 
 function whitespace_shortcode_featured_image_url(){
-    return '<?php the_post_thumbnail_url(); ?>';
+  return '<?php the_post_thumbnail_url(); ?>';
 }
 
 function whitespace_shortcode_permalink(){
-    return '<?php the_permalink(); ?>';
+  return '<?php the_permalink(); ?>';
+}
+
+function whitespace_shortcode_search_form(){
+  return '<?php get_search_form(); ?>';
 }
 
 function whitespace_shortcode_cta_link(){
-    return '<?php the_field(link); ?>';
+  return '<?php the_field(link); ?>';
 }
 
 function whitespace_shortcode_cta_icon() {
-    return '<i class="fa <?php the_field(font_awesome_icon_class); ?>"></i>';
+  return '<i class="fa <?php the_field(font_awesome_icon_class); ?>"></i>';
 }
 
 add_shortcode( 'the_title', 'whitespace_shortcode_title' );
@@ -109,6 +113,7 @@ add_shortcode( 'the_content', 'whitespace_shortcode_content' );
 add_shortcode( 'featured_image', 'whitespace_shortcode_featured_image' );
 add_shortcode( 'featured_image_url', 'whitespace_shortcode_featured_image_url' );
 add_shortcode( 'the_permalink', 'whitespace_shortcode_permalink' );
+add_shortcode( 'search_form', 'whitespace_shortcode_search_form' );
 add_shortcode( 'cta_link', 'whitespace_shortcode_cta_link' );
 add_shortcode( 'cta_icon', 'whitespace_shortcode_cta_icon' );
 
