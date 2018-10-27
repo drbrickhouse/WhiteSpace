@@ -24,27 +24,20 @@ add_action('wp_enqueue_scripts', 'whitespace_theme_js');
 function whitespace_enable_feautres() {
   add_theme_support( 'post-thumbnails' );
   add_theme_support( 'menus' );
-  add_filter('widget_text','do_shortcode');
-  //Allow PHP in widgets that use widget_tex filter
-  /*
-  function execute_php($html){
-       if(strpos($html,"<"."?php")!==false){
-            ob_start();
-            eval("?".">".$html);
-            $html=ob_get_contents();
-            ob_end_clean();
-       }
-       return $html;
-  }
-  add_filter('widget_text','execute_php',100);
-  */
 }
 
 add_action('init', 'whitespace_enable_feautres');
 
+
 //Disable Adding Paragraphs
 remove_filter( 'the_content', 'wpautop' );
 remove_filter( 'the_excerpt', 'wpautop' );
+
+//Remove the Read More Dots
+function whitespace_excerpt_more( $more ) {
+    return '';
+}
+add_filter( 'excerpt_more', 'whitespace_excerpt_more' );
 
 //Navigation Menus
 function register_theme_menus() {
@@ -57,12 +50,21 @@ function register_theme_menus() {
 add_action('init', 'register_theme_menus');
 
 //Register Custom Navigation Walker
-require_once('wp_bootstrap_navwalker.php');
+if(file_exists(get_stylesheet_directory() . '/wp_bootstrap_navwalker.php')) {
+  require_once(get_stylesheet_directory() . '/wp_bootstrap_navwalker.php');
+} else {
+  require_once(get_template_directory() . '/wp_bootstrap_navwalker.php');
+}
 
 //WooCommerce
 function whitespace_woocommerce_setup() {
   //Declare WooCommerce Support
   add_theme_support( 'woocommerce' );
+
+  //Add support for image gallery options
+  add_theme_support( 'wc-product-gallery-zoom' );
+  add_theme_support( 'wc-product-gallery-lightbox' );
+  add_theme_support( 'wc-product-gallery-slider' );
 }
 
 add_action( 'after_setup_theme', 'whitespace_woocommerce_setup' );
@@ -84,8 +86,19 @@ function whitespace_shortcode_content(){
   return '<?php the_content(); ?>';
 }
 
+function whitespace_shortcode_excerpt(){
+  return'<?php the_excerpt(); ?>';
+}
+
 function whitespace_shortcode_featured_image(){
   return '<?php the_post_thumbnail(); ?>';
+}
+
+function whitespace_shortcode_category(){
+  return '<?php
+  $whitspace_category_post_id = get_the_ID();
+  $cats = get_the_category(); ?>
+  <a href="<?php echo get_category_link($cats[0]->cat_ID); ?>"><?php echo $cats[0]->name; ?></a>';
 }
 
 function whitespace_shortcode_featured_image_url(){
@@ -108,14 +121,51 @@ function whitespace_shortcode_cta_icon() {
   return '<i class="fa <?php the_field(font_awesome_icon_class); ?>"></i>';
 }
 
+function whitespace_shortcode_event_start_date($format) {
+  extract (shortcode_atts(array(
+    'dateformat' => 'M jS'
+  ), $format));
+
+  $output = '<?php echo eo_get_the_start("' . $dateformat . '"); ?>';
+
+  return $output;
+}
+
+function whitespace_shortcode_event_end_date($format) {
+  extract (shortcode_atts(array(
+    'dateformat' => 'M jS'
+  ), $format));
+
+  $output = '<?php echo eo_get_the_end("' . $dateformat . '"); ?>';
+
+  return $output;
+}
+
+function whitespace_shortcode_event_start_time($format) {
+  extract (shortcode_atts(array(
+    'timeformat' => 'g:i A'
+  ), $format));
+
+  $output = '<?php echo eo_get_the_start("' . $timeformat . '"); ?>';
+
+  return $output;
+}
+
+
+
 add_shortcode( 'the_title', 'whitespace_shortcode_title' );
 add_shortcode( 'the_content', 'whitespace_shortcode_content' );
+add_shortcode( 'the_excerpt', 'whitespace_shortcode_excerpt' );
 add_shortcode( 'featured_image', 'whitespace_shortcode_featured_image' );
+add_shortcode( 'the_category', 'whitespace_shortcode_category' );
 add_shortcode( 'featured_image_url', 'whitespace_shortcode_featured_image_url' );
 add_shortcode( 'the_permalink', 'whitespace_shortcode_permalink' );
 add_shortcode( 'search_form', 'whitespace_shortcode_search_form' );
 add_shortcode( 'cta_link', 'whitespace_shortcode_cta_link' );
 add_shortcode( 'cta_icon', 'whitespace_shortcode_cta_icon' );
+add_shortcode( 'event_start_date', 'whitespace_shortcode_event_start_date' );
+add_shortcode( 'event_end_date', 'whitespace_shortcode_event_end_date' );
+add_shortcode( 'event_start_time', 'whitespace_shortcode_event_start_time' );
 
 //Custom fields
 if(function_exists("register_field_group"))
@@ -165,6 +215,7 @@ if(function_exists("register_field_group"))
             'a1-b13' => 'A1-B13',
             'a1-b23' => 'A1-B23',
             'a1-b123' => 'A1-B123',
+            'b12' => 'B12'
   				),
   				'default_value' => 'default',
   				'allow_null' => 0,
@@ -274,16 +325,246 @@ if(function_exists("register_field_group"))
 		),
 		'menu_order' => 0,
 	));
+  register_field_group(array (
+		'id' => 'acf_locations',
+		'title' => 'Locations',
+		'fields' => array (
+			array (
+				'key' => 'field_5a95ae4f2cfbd',
+				'label' => 'Address Line 1',
+				'name' => 'address_line_1',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a95ae8e2cfbe',
+				'label' => 'Address Line 2',
+				'name' => 'address_line_2',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a95aeaf2cfbf',
+				'label' => 'City',
+				'name' => 'city',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a95aeb72cfc0',
+				'label' => 'State',
+				'name' => 'state',
+				'type' => 'select',
+				'choices' => array (
+					'Alabama' => 'Alabama',
+					'Alaska' => 'Alaska',
+					'Arizona' => 'Arizona',
+					'Arkansas' => 'Arkansas',
+					'California' => 'California',
+					'Colorado' => 'Colorado',
+					'Connecticut' => 'Connecticut',
+					'Delaware' => 'Delaware',
+					'Florida' => 'Florida',
+					'Georgia' => 'Georgia',
+					'Hawaii' => 'Hawaii',
+					'Idaho' => 'Idaho',
+					'Illinois' => 'Illinois',
+					'Indiana' => 'Indiana',
+					'Iowa' => 'Iowa',
+					'Kansas' => 'Kansas',
+					'Kentucky' => 'Kentucky',
+					'Louisiana' => 'Louisiana',
+					'Maine' => 'Maine',
+					'Maryland' => 'Maryland',
+					'Massachusetts' => 'Massachusetts',
+					'Michigan' => 'Michigan',
+					'Minnesota' => 'Minnesota',
+					'Mississippi' => 'Mississippi',
+					'Missouri' => 'Missouri',
+					'Montana' => 'Montana',
+					'Nebraska' => 'Nebraska',
+					'Nevada' => 'Nevada',
+					'New Hampshire' => 'New Hampshire',
+					'New Jersey' => 'New Jersey',
+					'New Mexico' => 'New Mexico',
+					'New York' => 'New York',
+					'North Carolina' => 'North Carolina',
+					'North Dakota' => 'North Dakota',
+					'Ohio' => 'Ohio',
+					'Oklahoma' => 'Oklahoma',
+					'Oregon' => 'Oregon',
+					'Pennsylvania' => 'Pennsylvania',
+					'Rhode Island' => 'Rhode Island',
+					'South Carolina' => 'South Carolina',
+					'South Dakota' => 'South Dakota',
+					'Tennessee' => 'Tennessee',
+					'Texas' => 'Texas',
+					'Utah' => 'Utah',
+					'Vermont' => 'Vermont',
+					'Virginia' => 'Virginia',
+					'Washington' => 'Washington',
+					'Washington DC' => 'Washington DC',
+					'West Virginia' => 'West Virginia',
+					'Wisconsin' => 'Wisconsin',
+					'Wyoming' => 'Wyoming',
+				),
+				'default_value' => 'Alabama',
+				'allow_null' => 0,
+				'multiple' => 0,
+			),
+			array (
+				'key' => 'field_5a95af542cfc1',
+				'label' => 'ZIP Code',
+				'name' => 'zip_code',
+				'type' => 'number',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+        'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a95af6a2cfc2',
+				'label' => 'Phone Number',
+				'name' => 'phone_number',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'min' => '',
+        'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a95af9b2cfc3',
+				'label' => 'Fax Number',
+				'name' => 'fax_number',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'min' => '',
+				'max' => '',
+				'step' => '',
+			),
+			array (
+				'key' => 'field_5a95afe42cfc4',
+				'label' => 'Email Address',
+				'name' => 'email_address',
+				'type' => 'email',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'locations',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+			),
+		),
+		'menu_order' => 0,
+	));
+  register_field_group(array (
+		'id' => 'acf_staff',
+		'title' => 'Staff',
+		'fields' => array (
+			array (
+				'key' => 'field_5a99cbc902e95',
+				'label' => 'Phone Number',
+				'name' => 'phone_number',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
+				'key' => 'field_5a99cc0a02e96',
+				'label' => 'Email Address',
+				'name' => 'email_address',
+				'type' => 'email',
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'staff',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+			),
+		),
+		'menu_order' => 0,
+	));
 }
 
+
+//Global Variables
+function whitespace_global_variables() {
+	global $post_types;
+	$post_types = get_post_types();
+}
+
+add_action( 'init', 'whitespace_global_variables', 999 );
+
 //Widgets
+  //Allow Shortcodes in Widgets
+  add_filter( 'widget_text', 'shortcode_unautop');
+  add_filter('widget_text', 'do_shortcode', 101);
+  add_filter('widget_custom_html_content', 'do_shortcode');
+
 function whitespace_create_widget($name, $id, $description) {
   register_sidebar(array(
     'name' => __($name),
     'id' => $id,
     'description' => __($description),
-    'before_widget' => '<div class="row widget'.' '.$id.' '.'"><div class="col-md-12"><div class="widget-inner">',
-    'after_widget' => '</div></div></div>',
+    'before_widget' => '<div class="row widget'.' '.$id.' '.'"><div class="col-md-12"><div class="row widget-inner"><div class="col-md-12">',
+    'after_widget' => '</div></div></div></div>',
     'before_title' => '<h2 class="module-heading">',
     'after_title' => '</h2>'
   ));
@@ -301,12 +582,12 @@ whitespace_create_widget('Home 1', 'home-1', 'The first major area on the home p
 whitespace_create_widget('Home 2', 'home-2', 'The second major area on the home page, generally used for CTAs');
 whitespace_create_widget('Home 3', 'home-3', 'The third major area on the home page, generally used for a welcome message');
 whitespace_create_widget('Home 4', 'home-4', 'The fourth major area on the home page');
+whitespace_create_widget('Home 5', 'home-5', 'The fifth major area on the home page');
+whitespace_create_widget('Home 6', 'home-6', 'The sixth major area on the home page');
 whitespace_create_widget('Footer A1', 'footer-a1', '');
 whitespace_create_widget('Footer B1', 'footer-b1', '');
 whitespace_create_widget('Footer B2', 'footer-b2', '');
 whitespace_create_widget('Footer B3', 'footer-b3', '');
 whitespace_create_widget('Sidebar A', 'sidebar-a', 'The first of two available sidebars in this theme');
 whitespace_create_widget('Sidebar B', 'sidebar-b', 'The second of two available sidebars in this theme');
-
-//Global Variables
 ?>

@@ -13,29 +13,33 @@ if ($header_choice == 'default') {
 
 <!--Content-->
 <div class="row">
-  <div class="breadcrumbs">
-    <div class="col-md-12">
-      <?php
-      if ( function_exists('yoast_breadcrumb') ) {
-      yoast_breadcrumb('<p id="breadcrumbs">','</p>');
-      }
-      ?>
-    </div>
-    <div class="clear"></div>
-  </div>
-  <div class="main-wrapper">
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-md-12 title-bar">
-          <h1 class="page-title"><?php the_title(); ?></h1>
-        </div>
+  <div class="col-md-12">
+    <div class="row breadcrumbs">
+      <div class="col-md-12">
+        <?php
+        if ( function_exists('yoast_breadcrumb') ) {
+        yoast_breadcrumb('<p id="breadcrumbs">','</p>');
+        }
+        ?>
       </div>
-      <div class="content-wrapper">
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="row main-wrapper">
+      <div class="col-md-12">
         <div class="row">
-          <div class="col-md-12">
-            <?php if ( have_posts() ) : while( have_posts() ) : the_post();
-                 the_content();
-            endwhile; endif; ?>
+          <div class="col-md-12 title-bar">
+            <h1 class="page-title"><?php the_title(); ?></h1>
+          </div>
+        </div>
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <?php if ( have_posts() ) : while( have_posts() ) : the_post();
+                   the_content();
+              endwhile; endif; ?>
+            </div>
           </div>
         </div>
       </div>

@@ -41,14 +41,16 @@ if ($header_choice == 'default') {
       </div>
     </div>
   </div>
-  <div class="row main-wrapper">
-    <div class="col-md-12">
-      <div class="content-wrapper">
-        <div class="row">
-          <div class="col-md-12">
-            <?php if ( have_posts() ) : while( have_posts() ) : the_post();
-                 the_content();
-            endwhile; endif; ?>
+  <div class="col-md-12">
+    <div class="row main-wrapper">
+      <div class="col-md-12">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <?php if ( have_posts() ) : while( have_posts() ) : the_post();
+                   the_content();
+              endwhile; endif; ?>
+            </div>
           </div>
         </div>
       </div>
@@ -61,7 +63,7 @@ if ($header_choice == 'default') {
 
 <?php
 $footer_choice = get_field('footer');
-if ($header_footer == 'default') {
+if ($footer_choice == 'default') {
   get_footer();
 } else {
   get_footer($footer_choice);
